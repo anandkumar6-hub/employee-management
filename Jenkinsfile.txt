@@ -1,62 +1,28 @@
+pipeline {
+    agent any
 
-stage('Build') {
-steps {
-sh '${MVN_HOME}/bin/mvn -B clean package'
-}
-}
+    tools {
+        maven 'M3'
+        jdk 'JDK17'
+    }
 
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/anandkumar6-hub/employee-management.git'
+            }
+        }
 
-stage('Test') {
-steps {
-sh '${MVN_HOME}/bin/mvn test'
-}
-}
+        stage('Build') {
+            steps {
+                bat 'mvn clean install'
+            }
+        }
 
-
-stage('Code Quality (Sonar)') {
-when {
-expression { return env.SONAR_HOST_URL != null }
-}
-steps {
-// placeholder: configure SonarScanner and credentials in Jenkins
-echo 'Running SonarQube analysis (configure SONAR_HOST_URL and token in Jenkins)'
-}
-}
-
-
-stage('Archive Artifact') {
-steps {
-archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-}
-}
-
-
-stage('Publish to Nexus') {
-when {
-expression { return env.NEXUS_URL != null }
-}
-steps {
-echo 'Publish to Nexus (configure NEXUS_URL and credentials)'
-// example: sh 'mvn deploy -DskipTests'
-}
-}
-
-
-stage('Deploy to Staging') {
-steps {
-echo 'Deploying to staging server (SCP/SSH)'
-// placeholder: scp and remote restart commands
-}
-}
-}
-
-
-post {
-success {
-echo 'Pipeline success'
-}
-failure {
-echo 'Pipeline failed — see console logs'
-}
-}
+        stage('Post Build') {
+            steps {
+                echo 'Build completed successfully!'
+            }
+        }
+    }
 }
