@@ -1,0 +1,12 @@
+## .gitignore
+```gitignore
+/target
+/.idea
+*.iml
+/.DS_Store
+/.vscode
+/.settings
+```
+
+
+---
