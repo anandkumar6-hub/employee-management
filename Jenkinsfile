@@ -1,25 +1,29 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'M3'
-        jdk 'JDK17'
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/anandkumar6-hub/employee-management.git'
+                echo 'Checking out code...'
+                checkout scm
             }
         }
 
         stage('Build') {
             steps {
+                echo 'Building the project...'
                 bat 'mvn clean install'
             }
         }
 
-        stage('Post Build') {
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                bat 'mvn test'
+            }
+        }
+
+        stage('Post-build') {
             steps {
                 echo 'Build completed successfully!'
             }
