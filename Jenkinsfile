@@ -12,20 +12,20 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                bat 'mvn clean install'
+                sh 'mvn clean install'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                bat 'mvn test'
+                sh 'mvn test'
             }
         }
 
         stage('Post-build') {
             steps {
-                echo 'Build completed successfully!'
+                echo '✅ Build completed successfully!'
             }
         }
     }
