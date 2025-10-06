@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.9.9-eclipse-temurin-17'
-            args '-v /root/.m2:/root/.m2'  // cache Maven dependencies
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
@@ -15,6 +10,12 @@ pipeline {
         }
 
         stage('Build') {
+            agent {
+                docker {
+                    image 'maven:3.9.9-eclipse-temurin-17'
+                    args '-v /root/.m2:/root/.m2'
+                }
+            }
             steps {
                 echo 'Building the project...'
                 sh 'mvn clean install'
@@ -22,6 +23,12 @@ pipeline {
         }
 
         stage('Test') {
+            agent {
+                docker {
+                    image 'maven:3.9.9-eclipse-temurin-17'
+                    args '-v /root/.m2:/root/.m2'
+                }
+            }
             steps {
                 echo 'Running tests...'
                 sh 'mvn test'
